@@ -23,7 +23,9 @@ import configuration from '../config/env.config';
         entities: [Game, Award, GameNumber, Task],
         migrations: ['./migrations/*migration{.ts,.js}'],
         synchronize: JSON.parse(configService.get('DB_SYNCHRONIZE_ENABLE')),
-        logging: JSON.parse(configService.get('DB_LOGGIN_ENABLE'))
+        logging: JSON.parse(configService.get('DB_LOGGIN_ENABLE')),
+        ssl: JSON.parse(configService.get('DB_SSL_ENABLE')),
+        extra: JSON.parse(configService.get('TYPE_ORM_CONFIG_EXTRA'))
       }),
       inject: [ConfigService],
     }),
