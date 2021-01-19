@@ -77,7 +77,7 @@ export class GameService {
           const result = await this.gameRepository.find({ where: { type: requestType.type.toUpperCase(), number: index } })
 
           if (result.length > 0) {
-            break;
+            continue;
           }
 
           const requestUrl = `${baseUrl}/p=concurso=${index}`
