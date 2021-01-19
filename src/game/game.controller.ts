@@ -1,12 +1,17 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Req, Res } from '@nestjs/common'
-import { Request, Response } from "express"
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common'
+import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Response } from "express"
+import { GameDto } from 'src/dto/game.dto'
+import TaksDto from 'src/dto/task.dto'
 import Search from './dto/request/search.request'
 import { GameService } from './game.service'
-
+@ApiTags(`game`)
 @Controller('/api/v1/game')
 export class GameController {
     constructor(private gameService: GameService) { }
 
+    @ApiResponse({ status: 200, type: GameDto })
+    @ApiResponse({ status: 500, description:`Error` })
     @Get('/:type/:game_number')
     getGame(@Param('game_number') gameNumber: number,
         @Param('type') type: string,
@@ -29,17 +34,22 @@ export class GameController {
     }
 
     @Post('/search')
+    @ApiResponse({ status: 200, type: [GameDto] })
+    @ApiResponse({ status: 500, description:`Error` })
     search(@Body() request: Search, @Res() response: Response) {
         this.gameService.search(request)
-        .then((res)=>{
-            response.status(HttpStatus.OK).json(res).send()
-        })
-        .catch((res)=>{
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(res).send()
-        })
+            .then((res) => {
+                response.status(HttpStatus.OK).json(res)
+            })
+            .catch((error) => {
+                Logger.error(error)
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error)
+            })
     }
 
     @Post('/update')
+    @ApiResponse({ status: 202, type: TaksDto })
+    @ApiResponse({ status: 500, description:`Error` })
     update(@Res() response: Response) {
 
         this.gameService.updateInformation()

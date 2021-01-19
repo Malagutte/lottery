@@ -1,8 +1,8 @@
 import { Award } from "src/models/award.model";
 import { Game } from "src/models/game.model";
 import { GameNumber } from "src/models/gameNumber.model";
-import AwardDto from "../../dto/award.dto";
-import { GameDto } from "../../dto/game.dto";
+import AwardDto from "../dto/award.dto";
+import { GameDto } from "../dto/game.dto";
 import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns'
 

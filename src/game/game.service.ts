@@ -2,11 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from 'src/models/game.model';
 import { Task } from 'src/models/task.model';
-import { Between, In, Repository } from 'typeorm';
-import { modelToDto, responseToModel } from './serialization/game.seralization'
+import { In, Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import Search from './dto/request/search.request';
 import SearchResponseDto from './dto/response/search.dto.response';
+import { modelToDto, responseToModel } from '../serialization/game.serialization';
+import { modelToDto as modelToDtoTask } from '../serialization/task.serialization';
 const requestp = require('request-promise')
 
 @Injectable()
@@ -44,7 +45,7 @@ export class GameService {
 
     this.processUpdate(savedTask)
 
-    return savedTask;
+    return modelToDtoTask(savedTask);
 
   }
 
@@ -114,11 +115,10 @@ export class GameService {
         }
       },
       order: {
-        number: 'DESC'
+        number: request.order
       },
       where: {
-        type: In(request.types),
-        number : In(request.numbers)
+        type: In(request.types)
       },
       take: request.amount,
       skip: request.page
