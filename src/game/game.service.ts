@@ -31,6 +31,9 @@ export class GameService {
       where: { type: type.toUpperCase(), number: gameNumber }
     })
 
+    if (result == null) {
+      return null
+    }
 
     return modelToDto(result)
   }
@@ -63,9 +66,8 @@ export class GameService {
       }
     ]
 
-    for (let i = 0; i < typesForRequest.length; i++) {
-      const requestType = typesForRequest[i]
 
+    const allAsyncUpdateProcess = typesForRequest.map(async (requestType) => {
       const baseUrl = `http://loterias.caixa.gov.br/wps/portal/loterias/landing/${requestType.urlParameters}`
       const lastGame = await this.getLastGame(baseUrl);
 
@@ -97,8 +99,9 @@ export class GameService {
 
 
       }
+    })
 
-    }
+    await Promise.all(allAsyncUpdateProcess)
 
 
     this.closeTask(openTask)
@@ -124,7 +127,7 @@ export class GameService {
       skip: request.page
     })
 
-    const games = results.map(result => (modelToDto(result)))
+    const games = results.map(result => modelToDto(result))
     const response = new SearchResponseDto()
 
     response.games = games

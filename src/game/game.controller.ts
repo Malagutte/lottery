@@ -1,64 +1,45 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Response } from "express"
 import { GameDto } from 'src/dto/game.dto'
-import TaksDto from 'src/dto/task.dto'
+import { TaskDto } from 'src/dto/task.dto'
 import Search from './dto/request/search.request'
 import { GameService } from './game.service'
+
+
 @ApiTags(`game`)
 @Controller('/api/v1/game')
 export class GameController {
     constructor(private gameService: GameService) { }
 
     @ApiResponse({ status: 200, type: GameDto })
-    @ApiResponse({ status: 500, description:`Error` })
+    @ApiResponse({ status: 500, description: `Error` })
     @Get('/:type/:game_number')
+    @HttpCode(HttpStatus.OK)
     getGame(@Param('game_number') gameNumber: number,
-        @Param('type') type: string,
-        @Res() response: Response) {
+        @Param('type') type: string) {
 
-        //TODO param validation
-        this.gameService.getGameByTypeAndNumber(type, gameNumber)
-            .then((result) => {
-
-                if (result != null) {
-                    response.json(result).status(HttpStatus.OK)
-                } else {
-                    response.status(HttpStatus.NO_CONTENT).send()
-                }
-            })
-            .catch((error) => {
-                Logger.error(error)
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
-            })
+        return this.gameService.getGameByTypeAndNumber(type, gameNumber)
+            .then((result) => { return result });
     }
 
     @Post('/search')
     @ApiResponse({ status: 200, type: [GameDto] })
-    @ApiResponse({ status: 500, description:`Error` })
-    search(@Body() request: Search, @Res() response: Response) {
-        this.gameService.search(request)
-            .then((res) => {
-                response.status(HttpStatus.OK).json(res)
-            })
-            .catch((error) => {
-                Logger.error(error)
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error)
-            })
+    @ApiResponse({ status: 500, description: `Error` })
+    @HttpCode(HttpStatus.OK)
+    search(@Body() request: Search) {
+        return this.gameService.search(request)
+            .then((res) => { return res })
     }
 
     @Post('/update')
-    @ApiResponse({ status: 202, type: TaksDto })
-    @ApiResponse({ status: 500, description:`Error` })
-    update(@Res() response: Response) {
+    @ApiResponse({ status: 202, type: TaskDto })
+    @ApiResponse({ status: 500, description: `Error` })
+    @HttpCode(HttpStatus.ACCEPTED)
+    update() {
 
-        this.gameService.updateInformation()
-            .then((res) => {
-                response.json(res).status(HttpStatus.ACCEPTED)
-            })
-            .catch((error) => {
-                response.json(error).status(HttpStatus.INTERNAL_SERVER_ERROR)
-            })
+        return this.gameService.updateInformation()
+            .then((res) => { return res })
+            .catch((error) => {return error})
 
     }
 }

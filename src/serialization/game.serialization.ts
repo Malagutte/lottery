@@ -7,11 +7,12 @@ import { v4 as uuid } from 'uuid';
 import { parse } from 'date-fns'
 
 export const modelToDto = (game: Game) => {
-    let dto: GameDto = new GameDto()
+    const dto: GameDto = new GameDto()
 
-    dto.gameNumber = game.number
+    dto.number = game.number
     dto.id = game.id
     dto.date = game.date
+    dto.type = game.type  
     dto.numbers = game.numbers.map(number => number.value).sort((a, b) => a - b)
     dto.awards = game.awards.map(award => Object.assign(new AwardDto(), award)).sort((a, b) => a.hits + b.hits)
 

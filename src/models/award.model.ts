@@ -1,3 +1,4 @@
+import { Expose } from "class-transformer"
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
 import { Game } from "./game.model"
 
@@ -11,9 +12,11 @@ export class Award {
     hits: number
 
     @Column({ name: "awd_money_value", type: "decimal", precision: 20, scale: 2 })
+    @Expose({ name: 'money_value' })
     moneyValue: number
 
     @Column({ name: "awd_total_winners" })
+    @Expose({ name: 'total_winners' })
     totalWinners: number
 
     @ManyToOne(() => Game, entity => entity.awards, { cascade: ['insert', 'update'] })

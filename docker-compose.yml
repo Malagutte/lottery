@@ -11,3 +11,5 @@ services:
       POSTGRES_DB: lottery_db
     ports:
       - 5432:5432
+    volumes:
+      - /private/var/lib/postgresql:/var/lib/postgresql
