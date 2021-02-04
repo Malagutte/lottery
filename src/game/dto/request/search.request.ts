@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 export default class Search {
 
-    @ApiProperty({ enum: [`MEGASENA`, `LOTOFACIL`], type: [] })
+    @ApiProperty({ enum: [`MEGASENA`, `LOTOFACIL`, `QUINA`], type: [] })
     types: string[]
 
     @ApiProperty()
@@ -12,5 +12,14 @@ export default class Search {
 
     @ApiProperty({ enum: [`DESC`, `ASC`] })
     order: EOrder
+
+    @ApiProperty({ type: Date })
+    from: Date
+    
+    @ApiProperty({ type: Date })
+    to: Date
+
+    @ApiProperty()
+    fields: string[]
 
 }

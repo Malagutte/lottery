@@ -1,26 +1,31 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
-import { Award } from "./award.model"
-import { GameNumber } from "./gameNumber.model"
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as mongoose from 'mongoose';
+import { Award } from "./award.model";
 
-@Entity({ name: "gme_game" })
+ 
+
+export type GameDocument = Game & mongoose.Document;
+@Schema()
 export class Game {
 
-    @PrimaryColumn('uuid', { generated: 'uuid', name: "gme_id" })
-    id: string
+    @Prop()
+    id : string
 
-    @Column({ name: "gme_type", nullable: false })
+    @Prop()
     type: string
 
-    @Column({ name: "gme_number", nullable: false })
+    @Prop()
     number: number
 
-    @Column({ name: "gme_date", nullable: false })
+    @Prop()
     date: Date
 
-    @OneToMany(() => Award, entity => entity.game, { cascade: ['insert', 'update'] })
+    @Prop()
     awards: Award[]
 
-    @OneToMany(() => GameNumber, entity => entity.game, { cascade: ['insert', 'update'] })
-    numbers: GameNumber[]
+    @Prop()
+    numbers: number[]
 
 }
+
+export const GameSchema = SchemaFactory.createForClass(Game);

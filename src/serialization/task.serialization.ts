@@ -1,8 +1,8 @@
 import { TaskDto } from "src/dto/task.dto";
-import { Task } from "src/models/task.model";
+import { TaskDocument } from "src/models/task.model";
 
 
-export const modelToDto = (task: Task) => {
+export const modelToDto = (task: TaskDocument) => {
 
     const dto = new TaskDto()
 

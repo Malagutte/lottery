@@ -1,26 +1,15 @@
-import { Expose } from "class-transformer"
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
-import { Game } from "./game.model"
+import { Prop } from "@nestjs/mongoose"
 
-@Entity({ name: "awd_award" })
+
 export class Award {
-
-    @PrimaryColumn('uuid', { generated: 'uuid', name: "awd_id" })
-    id: string
-
-    @Column({ name: "awd_hits" })
+    
+    @Prop()
     hits: number
 
-    @Column({ name: "awd_money_value", type: "decimal", precision: 20, scale: 2 })
-    @Expose({ name: 'money_value' })
+    @Prop()
     moneyValue: number
 
-    @Column({ name: "awd_total_winners" })
-    @Expose({ name: 'total_winners' })
+    @Prop()
     totalWinners: number
-
-    @ManyToOne(() => Game, entity => entity.awards, { cascade: ['insert', 'update'] })
-    @JoinColumn({ name: "gme_id" })
-    game: Game
 
 }

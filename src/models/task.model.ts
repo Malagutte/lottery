@@ -1,17 +1,18 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm"
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from 'mongoose';
 
-@Entity({ name: 'tsk_task' })
+export type TaskDocument = Task & Document;
+@Schema()
 export class Task {
 
-    @PrimaryColumn('uuid', { generated: 'uuid' ,name:"tsk_id"})
-    id: string
-
-    @Column({ name: "tsk_is_closed", default: false })
+    @Prop()
     isClosed: boolean
 
-    @Column({ name: "tsk_init_date", nullable: false })
+    @Prop()
     initDate: Date
 
-    @Column({ name: "tsk_end_date", nullable: true })
+    @Prop()
     endDate: Date
 }
+
+export const TaskSchema = SchemaFactory.createForClass(Task);

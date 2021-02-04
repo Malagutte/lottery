@@ -13,7 +13,7 @@ export default class AwardDto {
     @ApiProperty({name:"money_value"})
     moneyValue: number
     
-    @ApiProperty({name:"money_value"})
+    @ApiProperty({name:"total_winners"})
     totalWinners: number
 
 }

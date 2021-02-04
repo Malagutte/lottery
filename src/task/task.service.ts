@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from 'src/models/task.model';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Task, TaskDocument } from 'src/models/task.model';
 import { modelToDto } from 'src/serialization/task.serialization';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class TaskService {
-    constructor(@InjectRepository(Task) private taskRepository: Repository<Task>) { }
+    constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) { }
 
-    async getTask(task_id: string) {
-        const taskModel = await this.taskRepository.findOne({ where: { id: task_id } })
+    async getTask(taskId: string) {
+        const taskModel = await this.taskModel.findById(taskId).exec();
 
+
+        if (taskModel == null) {
+            throw new HttpException(null, HttpStatus.NO_CONTENT);
+        }
         return modelToDto(taskModel)
     }
 }
