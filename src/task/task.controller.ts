@@ -1,7 +1,6 @@
-import { Controller, Get, HttpStatus, Logger, Param, Res } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Response } from "express"
-import { TaskDto } from 'src/dto/task.dto'
+import { TaskDto } from '../dto/task.dto'
 import { TaskService } from './task.service'
 
 

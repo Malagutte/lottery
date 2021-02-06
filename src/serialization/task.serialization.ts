@@ -1,5 +1,5 @@
-import { TaskDto } from "src/dto/task.dto";
-import { TaskDocument } from "src/models/task.model";
+import { TaskDto } from "../dto/task.dto";
+import { TaskDocument } from "../models/task.model";
 
 
 export const modelToDto = (task: TaskDocument) => {

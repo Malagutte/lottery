@@ -24,6 +24,8 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
+    networks:
+      - core_service_network
 
 networks:
   core_service_network:

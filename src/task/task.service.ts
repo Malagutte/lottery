@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Task, TaskDocument } from 'src/models/task.model';
-import { modelToDto } from 'src/serialization/task.serialization';
+import { Task, TaskDocument } from '../models/task.model';
+import { modelToDto } from '../serialization/task.serialization';
 
 @Injectable()
 export class TaskService {

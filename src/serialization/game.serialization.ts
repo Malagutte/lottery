@@ -8,7 +8,7 @@ export const modelToDto = (game: GameDocument) => {
     const dto: GameDto = new GameDto()
 
     dto.number = game.number
-    dto.id = game._id ? game._id.toString() : undefined
+    dto.id = game.id
     dto.date = game.date
     dto.type = game.type
     dto.numbers = game.numbers
