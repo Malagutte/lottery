@@ -21,15 +21,9 @@ export class GameService {
   ) {}
 
   async getGameByTypeAndNumber(type: string, gameNumber: number) {
-    const result = await this.gameModel
+    return await this.gameModel
       .findOne({ type: type, number: gameNumber })
       .exec();
-
-    if (result == null) {
-      throw new HttpException(null, HttpStatus.NO_CONTENT);
-    }
-
-    return modelToDto(result);
   }
 
   async updateInformation() {

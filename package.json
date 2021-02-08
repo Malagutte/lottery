@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:local": "NODE_ENV=local nest start --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test:cov": "jest --config ./test/jest-e2e.json --coverage",
+    "test:cov": "jest --coverage",
     "test": "jest"
   },
   "dependencies": {
@@ -72,7 +72,10 @@
       "ts"
     ],
     "rootDir": "src",
-    "testRegex": [".*\\.e2e-spec\\.ts$",".*\\.spec\\.ts$"],
+    "testRegex": [
+      ".*\\.e2e-spec\\.ts$",
+      ".*\\.spec\\.ts$"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

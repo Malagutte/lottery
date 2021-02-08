@@ -26,7 +26,7 @@ export const responseToModel = (game: any) => {
 
   const awards: Award[] = game.listaRateioPremio.map((premio) => {
     const award = new Award();
-    const hits = Number(premio.descricaoFaixa.split(' ')[0]);
+    const hits = premio.descricaoFaixa != null ? Number(premio.descricaoFaixa.split(' ')[0]) : null;
     award.moneyValue = premio.valorPremio;
     award.totalWinners = premio.numeroDeGanhadores;
     award.hits = hits;

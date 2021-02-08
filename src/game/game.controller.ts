@@ -3,13 +3,15 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
-  Post,
+  Post
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GameDto } from '../dto/game.dto';
 import { TaskDto } from '../dto/task.dto';
+import { modelToDto } from '../serialization/game.serialization';
 import Search from './dto/request/search.request';
 import { GameService } from './game.service';
 
@@ -29,7 +31,11 @@ export class GameController {
     return this.gameService
       .getGameByTypeAndNumber(type, gameNumber)
       .then((result) => {
-        return result;
+        if (result == null) {
+          throw new HttpException(null, HttpStatus.NO_CONTENT);
+        }
+    
+        return modelToDto(result);
       });
   }
 
@@ -53,8 +59,5 @@ export class GameController {
       .then((res) => {
         return res;
       })
-      .catch((error) => {
-        return error;
-      });
   }
 }
