@@ -114,4 +114,68 @@ describe('TaskModule', () => {
     });
   });
 
+  describe('serialization', () => {
+    it('when serialize valid object should return casted object', async () => {
+      const now = new Date();
+      const taskId = new ObjectId().toHexString();
+      const dto = modelToDto({
+        $isDefault: null,
+        $ignore: null,
+        $isDeleted: null,
+        $isEmpty: null,
+        $isValid: null,
+        $locals: null,
+        $markValid: null,
+        $op: null,
+        $session: null,
+        $set: null,
+        $where: null,
+        collection: null,
+        db: null,
+        delete: null,
+        deleteOne: null,
+        depopulate: null,
+        directModifiedPaths: null,
+        equals: null,
+        execPopulate: null,
+        get: null,
+        getChanges: null,
+        increment: null,
+        init: null,
+        invalidate: null,
+        isDirectModified: null,
+        isDirectSelected: null,
+        isInit: null,
+        isModified: null,
+        isNew: null,
+        isSelected: null,
+        markModified: null,
+        model: null,
+        modelName: null,
+        modifiedPaths: null,
+        overwrite: null,
+        populate: null,
+        populated: null,
+        remove: null,
+        replaceOne: null,
+        save: null,
+        schema: null,
+        set: null,
+        toJSON: null,
+        toObject: null,
+        unmarkModified: null,
+        update: null,
+        updateOne: null,
+        validate: null,
+        validateSync: null,
+        isClosed: false,
+        initDate: now,
+        endDate: null,
+        id: taskId,
+      });
+
+      expect(dto.id).toBe(taskId);
+      expect(dto.initDate).toBe(now);
+    });
+  });
 });
