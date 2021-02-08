@@ -16,9 +16,9 @@ const requestp = require('request-promise');
 @Injectable()
 export class GameService {
   constructor(
-    @InjectModel(Game.name) private gameModel: Model<GameDocument>,
-    @InjectModel(Task.name) private taskModel: Model<TaskDocument>,
-  ) {}
+    @InjectModel(Game.name) private readonly gameModel: Model<GameDocument>,
+    @InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>,
+  ) { }
 
   async getGameByTypeAndNumber(type: string, gameNumber: number) {
     return await this.gameModel
@@ -125,15 +125,15 @@ export class GameService {
   private buildSelect(request: Search): any {
     return request.fields
       ? request.fields.map((field) => {
-          if (field.includes('id')) {
-            return field;
-          }
-          const splitFields = field
-            .split('.')
-            .map((subField) => toCamelCase(subField));
+        if (field.includes('id')) {
+          return field;
+        }
+        const splitFields = field
+          .split('.')
+          .map((subField) => toCamelCase(subField));
 
-          return splitFields.join('.');
-        })
+        return splitFields.join('.');
+      })
       : null;
   }
 
