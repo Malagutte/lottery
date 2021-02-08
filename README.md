@@ -3,19 +3,19 @@ Api domain about lottery brazil
 
 # prerequisite
 * node 14.5.x
-* yarn 1.22.x
+* npm 6.x
 * docker 20.10.x
 * docker-compose 1.27.x
 
 # Installation
 ```bash
-$ yarn install
+$ npm install
 ```
 
 # Running the app
 ```bash
 docker-compose up -d
-yarn start:local
+npm run start:local
 ```
 
 # application swagger access
