@@ -1,43 +1,42 @@
 import { parse } from 'date-fns';
-import { Award } from "src/models/award.model";
-import { Game, GameDocument } from "src/models/game.model";
-import AwardDto from "../dto/award.dto";
-import { GameDto } from "../dto/game.dto";
+import { Award } from 'src/models/award.model';
+import { Game, GameDocument } from 'src/models/game.model';
+import AwardDto from '../dto/award.dto';
+import { GameDto } from '../dto/game.dto';
 
 export const modelToDto = (game: GameDocument) => {
-    const dto: GameDto = new GameDto()
+  const dto: GameDto = new GameDto();
 
-    dto.number = game.number
-    dto.id = game.id
-    dto.date = game.date
-    dto.type = game.type
-    dto.numbers = game.numbers
-    dto.awards = game.awards ? game.awards.map(award => Object.assign(new AwardDto(), award)) : undefined
+  dto.number = game.number;
+  dto.id = game.id;
+  dto.date = game.date;
+  dto.type = game.type;
+  dto.numbers = game.numbers;
+  dto.awards = game.awards
+    ? game.awards.map((award) => Object.assign(new AwardDto(), award))
+    : undefined;
 
-    return dto
-}
-
+  return dto;
+};
 
 export const responseToModel = (game: any) => {
-    const gameModel = new Game()
-    const resultNumbers = game.listaDezenas
-    const gameNumbers: number[] = resultNumbers
+  const gameModel = new Game();
+  const resultNumbers = game.listaDezenas;
+  const gameNumbers: number[] = resultNumbers;
 
-    const awards: Award[] = game.listaRateioPremio.map(premio => {
-        const award = new Award()
-        const hits = Number(premio.descricaoFaixa.split(" ")[0])
-        award.moneyValue = premio.valorPremio
-        award.totalWinners = premio.numeroDeGanhadores
-        award.hits = hits
-        return award
+  const awards: Award[] = game.listaRateioPremio.map((premio) => {
+    const award = new Award();
+    const hits = Number(premio.descricaoFaixa.split(' ')[0]);
+    award.moneyValue = premio.valorPremio;
+    award.totalWinners = premio.numeroDeGanhadores;
+    award.hits = hits;
+    return award;
+  });
 
-    })
+  gameModel.numbers = gameNumbers;
+  gameModel.awards = awards;
+  gameModel.number = game.numero;
+  gameModel.date = parse(game.dataApuracao, 'dd/MM/yyyy', new Date());
 
-    gameModel.numbers = gameNumbers
-    gameModel.awards = awards
-    gameModel.number = game.numero
-    gameModel.date = parse(game.dataApuracao, 'dd/MM/yyyy', new Date())
-
-    return gameModel;
-
-}
+  return gameModel;
+};

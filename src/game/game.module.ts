@@ -9,15 +9,17 @@ import { GameService } from './game.service';
 @Module({
   controllers: [GameController],
   providers: [GameService],
-  imports: [MongooseModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService) => ({
-      connectionName: "game_module_con",
-      uri: configService.get('LOTTERY_DB_URL')
+  imports: [
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        connectionName: 'game_module_con',
+        uri: configService.get('LOTTERY_DB_URL'),
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  }),
-  MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
-  MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }])],
+    MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
+    MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
+  ],
 })
-export class GameModule { }
+export class GameModule {}
