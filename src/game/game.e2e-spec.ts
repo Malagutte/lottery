@@ -9,7 +9,7 @@ import { GameService } from './game.service'
 import * as request from 'supertest';
 
 
-describe('TaskModule', () => {
+describe('GameModule', () => {
     let app: INestApplication
     let service: GameService
 
