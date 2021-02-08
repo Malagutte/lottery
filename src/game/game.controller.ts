@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GameDto } from 'src/dto/game.dto';
-import { TaskDto } from 'src/dto/task.dto';
+import { GameDto } from '../dto/game.dto';
+import { TaskDto } from '../dto/task.dto';
 import Search from './dto/request/search.request';
 import { GameService } from './game.service';
 

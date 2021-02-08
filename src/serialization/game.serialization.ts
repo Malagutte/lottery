@@ -1,6 +1,6 @@
 import { parse } from 'date-fns';
-import { Award } from 'src/models/award.model';
-import { Game, GameDocument } from 'src/models/game.model';
+import { Award } from '../models/award.model';
+import { Game, GameDocument } from '../models/game.model';
 import AwardDto from '../dto/award.dto';
 import { GameDto } from '../dto/game.dto';
 

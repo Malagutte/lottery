@@ -10,7 +10,7 @@ export default class Search {
   amount: number;
 
   @ApiProperty({ enum: [`DESC`, `ASC`] })
-  order: EOrder;
+  order: string;
 
   @ApiProperty({ type: Date })
   from: Date;
