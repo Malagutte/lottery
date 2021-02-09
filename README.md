@@ -1,4 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/github/Malagutte/lottery-domain-api/badge.svg?branch=main)](https://coveralls.io/github/Malagutte/lottery-domain-api?branch=main)
 # Api lottery 
 Api domain about lottery brazil
 
