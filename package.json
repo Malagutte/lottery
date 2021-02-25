@@ -12,7 +12,8 @@
     "start:local": "NODE_ENV=local nest start --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:cov": "jest --coverage",
-    "test": "jest"
+    "test": "jest",
+    "start": "nest start"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
