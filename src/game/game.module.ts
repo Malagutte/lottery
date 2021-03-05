@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Game, GameSchema } from 'src/models/game.model';
+import { GameRequest, GameRequestSchema } from 'src/models/gameRequest.model';
 import { Task, TaskSchema } from 'src/models/task.model';
 import { GameController } from './game.controller';
 import { GameService } from './game.service';
@@ -20,6 +21,7 @@ import { GameService } from './game.service';
     }),
     MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
+    MongooseModule.forFeature([{ name: GameRequest.name, schema: GameRequestSchema }]),
   ],
 })
-export class GameModule {}
+export class GameModule { }
