@@ -3,6 +3,7 @@ import { Award } from '../models/award.model';
 import { Game, GameDocument } from '../models/game.model';
 import AwardDto from '../dto/award.dto';
 import { GameDto } from '../dto/game.dto';
+import { Int32 } from 'bson';
 
 export const modelToDto = (game: GameDocument) => {
   const dto: GameDto = new GameDto();
@@ -11,7 +12,7 @@ export const modelToDto = (game: GameDocument) => {
   dto.id = game.id;
   dto.date = game.date;
   dto.type = game.type;
-  dto.numbers = game.numbers;
+  dto.numbers = game.numbers.map((num) => Number(num));
   dto.awards = game.awards
     ? game.awards.map((award) => Object.assign(new AwardDto(), award))
     : undefined;
