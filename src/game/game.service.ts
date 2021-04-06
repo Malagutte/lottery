@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as toCamelCase from 'camelcase';
-import { promises } from 'fs';
 import { Model } from 'mongoose';
+import { Award, AwardDocument } from 'src/models/award.model';
 import { GameRequest, GameRequestDocument } from 'src/models/gameRequest.model';
 import { Game, GameDocument } from '../models/game.model';
 import { Task, TaskDocument } from '../models/task.model';
+import * as awardSerialization from '../serialization/award.serialization';
 import {
   modelToDto,
   responseToModel
@@ -13,6 +14,8 @@ import {
 import { modelToDto as modelToDtoTask } from '../serialization/task.serialization';
 import Search from './dto/request/search.request';
 import SearchResponseDto from './dto/response/search.dto.response';
+
+
 const requestp = require('request-promise');
 
 @Injectable()
@@ -21,12 +24,16 @@ export class GameService {
     @InjectModel(Game.name) private readonly gameModel: Model<GameDocument>,
     @InjectModel(Task.name) private readonly taskModel: Model<TaskDocument>,
     @InjectModel(GameRequest.name) private readonly gameRequestModel: Model<GameRequestDocument>,
+    @InjectModel(Award.name) private readonly awardModel: Model<AwardDocument>,
   ) { }
 
   async getGameByTypeAndNumber(type: string, gameNumber: number) {
-    return await this.gameModel
+    const gameModel = await this.gameModel
       .findOne({ type: type, number: gameNumber })
       .exec();
+
+    return modelToDto(gameModel)
+
   }
 
   async updateInformation() {
@@ -58,19 +65,25 @@ export class GameService {
   }
 
   async search(request: Search) {
-    if (request.page == null) request.page = 0;
+    if (request.page == null || request.page == 0) request.page = 1;
 
     if (request.amount == null) request.amount = 10;
 
     const results = await this.gameModel
       .find(this.buildWhere(request))
       .select(this.buildSelect(request))
-      .skip(request.page)
+      .skip(request.amount * (request.page - 1))
       .limit(request.amount)
       .sort({ number: request.order })
       .exec();
 
-    const games = results.map((result) => modelToDto(result));
+
+
+    const games = results.map((result) => {
+      const dto = modelToDto(result)
+      return dto
+    });
+
     const response = new SearchResponseDto();
 
     response.games = games;
@@ -145,16 +158,9 @@ export class GameService {
     Logger.log(`==================Start update process type ${requestType.type} ============`);
     const baseUrl = `http://loterias.caixa.gov.br/wps/portal/loterias/landing/${requestType.urlParameters}`;
     const lastGame = await this.getLastGame(baseUrl);
-    const gamesPromise: Promise<void>[] = []
+
     for (let gameNumber = lastGame; gameNumber > 0; gameNumber--) {
-      gamesPromise.push(this.processByGame(requestType, baseUrl, gameNumber))
-
-      if (gameNumber == 1 || gamesPromise.length == 2) {
-        await Promise.all(gamesPromise)
-        gamesPromise.length = 0
-      }
-
-
+      await this.processByGame(requestType, baseUrl, gameNumber)
     }
     Logger.log(`==================End update process type ${requestType.type} ============`);
   }
@@ -204,7 +210,11 @@ export class GameService {
       game.type = requestType.type.toUpperCase();
 
       const newGame = new this.gameModel(game);
-      await newGame.save();
+      const gameDocument = await newGame.save();
+
+      const awards = awardSerialization.responseToModel(body.listaRateioPremio, gameDocument._id.toString())
+
+      await Promise.all(awards.map(award => new this.awardModel(award).save()))
 
       Logger.log(`Saved game ${game.type} - ${game.number}`);
     } catch (error) {

@@ -15,13 +15,11 @@ export class Game {
   number: number;
 
   @Prop()
-  date: Date;
-
-  @Prop()
-  awards: Award[];
+  date: string;
 
   @Prop()
   numbers: number[];
+  
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);

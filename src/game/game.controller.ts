@@ -35,7 +35,7 @@ export class GameController {
           throw new HttpException(null, HttpStatus.NO_CONTENT);
         }
     
-        return modelToDto(result);
+        return result;
       });
   }
 

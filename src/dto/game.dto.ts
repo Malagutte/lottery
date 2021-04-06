@@ -10,7 +10,7 @@ export class GameDto {
   type: string;
 
   @ApiProperty()
-  date: Date;
+  date: String;
 
   @ApiProperty()
   numbers: number[];

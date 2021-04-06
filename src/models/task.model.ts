@@ -14,4 +14,5 @@ export class Task {
   endDate: Date;
 }
 
-export const TaskSchema = SchemaFactory.createForClass(Task);
+export const TaskSchema = SchemaFactory.createForClass(Task)
+;
