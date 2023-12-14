@@ -1,0 +1,17 @@
+# Node.js
+**/node_modules
+**/*.log
+.env
+
+# React
+/build
+/.pnp
+.pnp.js
+
+# Go
+/bin
+*.exe
+*.dll
+*.so
+*.dylib
+/vendor/
