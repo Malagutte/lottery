@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { CaixaRequest, CaixaResponse } from './type.d';
 
@@ -15,7 +15,7 @@ export class WebRequestService {
 
         const request = this.httpService.get<CaixaResponse>(urlPath).pipe();
         const { data } = await firstValueFrom(request);
-        Logger.warn(data)
+
         return data;
     }
 }
