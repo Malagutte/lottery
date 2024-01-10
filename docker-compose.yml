@@ -1,0 +1,107 @@
+version: "3"
+services:
+  zookeeper:
+    container_name: "zookeeper"
+    image: confluentinc/cp-zookeeper:6.2.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: "zookeeper:2888:3888"
+    healthcheck:
+      test: ["CMD", "zookeeper-shell", "localhost:2181", "ls", "/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    container_name: "kafka"
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR:
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--list", "--zookeeper", "zookeeper:2181"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  kafka-ui:
+    container_name: "kafka-ui"
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8081:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+      KAFKA_CLUSTERS_0_SCHEMA_REGISTRY: "http://schema-registry:8081"
+      KAFKA_CLUSTERS_0_JMX_PORT: "9999"
+      KAFKA_CLUSTERS_0_JMX_USERNAME: "admin"
+      KAFKA_CLUSTERS_0_JMX_PASSWORD: "admin-secret"
+      KAFKA_CLUSTERS_0_JMX_ENABLE: "true"
+      KAFKA_CLUSTERS_0_JMX_SSL_ENABLE: "false"
+      KAFKA_CLUSTERS_0_JMX_SSL_TRUSTSTORE_LOCATION: "/tmp/kafka/cluster.truststore.jks"
+      KAFKA_CLUSTERS_0_JMX_SSL_TRUSTSTORE_PASSWORD: "truststore-password"
+      KAFKA_CLUSTERS_0_JMX_SSL_KEYSTORE_LOCATION: "/tmp/kafka/cluster.keystore.jks"
+      KAFKA_CLUSTERS_0_JMX_SSL_KEYSTORE_PASSWORD: "keystore-password"
+      KAFKA_CLUSTERS_0_JMX_SSL_KEY_PASSWORD: "key-password"
+      KAFKA_CLUSTERS_0_JMX_SSL_PROTOCOL: "TLSv1.2"
+      KAFKA_CLUSTERS_0_JMX_SSL_ENABLED_PROTOCOLS: "TLSv1.2"
+      KAFKA_CLUSTERS_0_JMX_SSL_CIPHER_SUITES: "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+      KAFKA_CLUSTERS_0_JMX_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
+      KAFKA_CLUSTERS_0_JMX_SSL_TRUSTSTORE_TYPE: "JKS"
+      KAFKA_CLUSTERS_0_JMX_SSL_KEYSTORE_TYPE: "JKS"
+
+  mysql:
+    container_name: "mysql_db_server"
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lottery_db
+    volumes:
+      - ./data/mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  phpmyadmin:
+    container_name: "phpmyadmin"
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data/phpmyadmin-sessions:/sessions
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:80"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  webscraper:
+    container_name: "webscraper"
+    build:
+      context: ./webscraper
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka

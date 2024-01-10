@@ -16,3 +16,5 @@
 *.so
 *.dylib
 /vendor/
+
+/data
