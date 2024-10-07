@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
-import { WebRequestModule } from './web-request/web-request.module';
+import { CaixaServiceModule } from './caixa-service/caixa-service.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      ignoreEnvFile: true,
-    }),
-    WebRequestModule
-  ],
+  imports: [CaixaServiceModule],
   controllers: [],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

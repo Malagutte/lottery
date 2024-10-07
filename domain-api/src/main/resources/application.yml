@@ -1,0 +1,7 @@
+spring:
+    application:
+        name: domain-api
+
+server:
+    port: 8080
+    prefix: /api
